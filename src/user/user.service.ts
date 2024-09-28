@@ -108,8 +108,8 @@ export class UserService {
     }
   }
 
-  async sendPasswordResetOTP(email: string): Promise<void> {
-    const user = await this.userRepository.findByEmail(email);
+  async sendPasswordResetOTP(username: string): Promise<void> {
+    const user = await this.userRepository.findByUsername(username);
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -125,7 +125,7 @@ export class UserService {
     );
 
     await this.mailerService.sendMail({
-      to: email,
+      to: user.email,
       subject: 'Your Password Reset OTP',
       template: './otp',
       context: {

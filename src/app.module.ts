@@ -12,6 +12,7 @@ import { FirebaseService } from './common/firebase.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TasksModule } from './task/tasks.module';
 import { AppController } from './app.controller';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { AppController } from './app.controller';
     UserModule,
     HttpModule,
     TasksModule,
+    CategoryModule,
   ],
   controllers: [UploadController, AppController],
   providers: [FirebaseService, AppService],

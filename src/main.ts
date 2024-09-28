@@ -9,8 +9,8 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('Real Estate')
-    .setDescription('The API of Real Estate')
+    .setTitle('Food API')
+    .setDescription('The API of Food')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

@@ -70,18 +70,18 @@ export class UserController {
     schema: {
       type: 'object',
       properties: {
-        email: { type: 'string' },
+        username: { type: 'string' },
       },
     },
   })
   async forgotPassword(
     @Body()
     body: {
-      email: string;
+      username: string;
     },
   ) {
-    const { email } = body;
-    await this.userService.sendPasswordResetOTP(email);
+    const { username } = body;
+    await this.userService.sendPasswordResetOTP(username);
     return { message: 'Password reset OTP sent to your email' };
   }
 
