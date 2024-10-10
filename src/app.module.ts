@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TasksModule } from './task/tasks.module';
 import { AppController } from './app.controller';
 import { CategoryModule } from './category/category.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { CategoryModule } from './category/category.module';
     HttpModule,
     TasksModule,
     CategoryModule,
+    CustomerModule,
   ],
   controllers: [UploadController, AppController],
   providers: [FirebaseService, AppService],
