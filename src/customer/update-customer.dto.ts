@@ -20,9 +20,9 @@ export class UpdateOrderListDto {
   @IsString({ message: 'Time must be a string' })
   time: string;
 
-  @ApiProperty({ example: 'veg', description: 'Category type of the order' })
+  @ApiProperty({ example: 'veg', description: 'Food type of the order' })
   @IsOptional()
-  categoryType: mongoose.Schema.Types.ObjectId;
+  foodType: mongoose.Schema.Types.ObjectId;
 
   @ApiProperty({ example: 'Pizza', description: 'Dish ordered' })
   @IsOptional()

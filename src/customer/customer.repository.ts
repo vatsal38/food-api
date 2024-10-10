@@ -23,11 +23,17 @@ export class CustomerRepository {
     if (!isSuperAdmin) {
       query.createdBy = userId;
     }
-    return this.customerModel.find(query).exec();
+    return this.customerModel
+      .find(query)
+      .populate({ path: 'orderList.foodType', model: 'Food' })
+      .exec();
   }
 
   async findOne(id: string): Promise<Customer> {
-    return this.customerModel.findById(id).exec();
+    return this.customerModel
+      .findById(id)
+      .populate({ path: 'orderList.foodType', model: 'Food' })
+      .exec();
   }
 
   async update(id: string, customer: Partial<Customer>): Promise<Customer> {
@@ -59,7 +65,12 @@ export class CustomerRepository {
     if (!isSuperAdmin) {
       query.createdBy = userId;
     }
-    return this.customerModel.find(query).skip(skip).limit(limit).exec();
+    return this.customerModel
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .populate({ path: 'orderList.foodType', model: 'Food' })
+      .exec();
   }
 
   async countAll(
@@ -101,14 +112,14 @@ export class CustomerRepository {
       return {};
     }
     const fieldsToSearch = [
-      'code',
-      'name',
-      'email',
-      'phone',
+      'invoiceNo',
+      'customerName',
+      'surName',
+      'Address',
       'village',
-      'username',
+      'phone',
       'gender',
-      'remarks',
+      'description',
     ];
     return {
       $or: fieldsToSearch.map((field) => ({

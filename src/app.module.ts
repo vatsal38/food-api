@@ -14,6 +14,7 @@ import { TasksModule } from './task/tasks.module';
 import { AppController } from './app.controller';
 import { CategoryModule } from './category/category.module';
 import { CustomerModule } from './customer/customer.module';
+import { FoodModule } from './food/food.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { CustomerModule } from './customer/customer.module';
     TasksModule,
     CategoryModule,
     CustomerModule,
+    FoodModule,
   ],
   controllers: [UploadController, AppController],
   providers: [FirebaseService, AppService],

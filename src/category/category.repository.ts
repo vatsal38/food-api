@@ -71,7 +71,23 @@ export class CategoryRepository {
     if (!isSuperAdmin) {
       query.createdBy = userId;
     }
-    return this.categoryModel.find(query).skip(skip).limit(limit).exec();
+    const categories = await this.categoryModel
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const filteredCategories = categories
+      .map((category) => {
+        if (category.status) {
+          category.subcategories = category.subcategories.filter(
+            (subcategory) => subcategory.status,
+          );
+          return category;
+        }
+        return null;
+      })
+      .filter((category) => category !== null);
+    return filteredCategories;
   }
 
   async countAll(

@@ -25,12 +25,12 @@ export class OrderList {
 
   @Prop({ required: true })
   @IsOptional()
-  @IsMongoId({ message: 'categoryType must be valid mongo id' })
+  @IsMongoId({ message: 'foodType must be valid mongo id' })
   @ApiProperty({
     example: '66f8487c648b5c22c97cc252',
-    description: 'Category type of the order',
+    description: 'Food Type of the order',
   })
-  categoryType: mongoose.Schema.Types.ObjectId;
+  foodType: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
   @ApiProperty({ example: 'Pizza', description: 'Dish ordered' })
