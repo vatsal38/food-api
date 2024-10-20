@@ -21,7 +21,7 @@ export class Subcategory {
   _id: mongoose.Schema.Types.ObjectId;
 }
 
-const SubcategorySchema = SchemaFactory.createForClass(Subcategory);
+export const SubcategorySchema = SchemaFactory.createForClass(Subcategory);
 
 @Schema()
 export class Category {

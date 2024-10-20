@@ -33,10 +33,10 @@ export class OrderList {
   foodType: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
-  @ApiProperty({ example: 'Pizza', description: 'Dish ordered' })
+  @ApiProperty({ example: 12, description: 'Dish ordered' })
   @IsOptional()
-  @IsString({ message: 'Dish must be a string' })
-  dish: string;
+  @IsString({ message: 'Dish must be a number' })
+  dish: number;
 
   @Prop({ required: true })
   @ApiProperty({ example: 'New York', description: 'Location of the order' })

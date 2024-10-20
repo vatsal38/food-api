@@ -24,10 +24,10 @@ export class UpdateOrderListDto {
   @IsOptional()
   foodType: mongoose.Schema.Types.ObjectId;
 
-  @ApiProperty({ example: 'Pizza', description: 'Dish ordered' })
+  @ApiProperty({ example: 11, description: 'Dish ordered' })
   @IsOptional()
-  @IsString({ message: 'Dish must be a string' })
-  dish: string;
+  @IsString({ message: 'Dish must be a number' })
+  dish: number;
 
   @ApiProperty({ example: 'New York', description: 'Location of the order' })
   @IsOptional()
