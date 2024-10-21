@@ -30,10 +30,7 @@ export class CustomerRepository {
   }
 
   async findOne(id: string): Promise<Customer> {
-    return this.customerModel
-      .findById(id)
-      .populate({ path: 'orderList.foodType', model: 'Food' })
-      .exec();
+    return this.customerModel.findById(id).exec();
   }
 
   async update(id: string, customer: Partial<Customer>): Promise<Customer> {
