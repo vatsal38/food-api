@@ -1,14 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import {
-  IsNotEmpty,
-  IsString,
-  IsPhoneNumber,
-  IsBoolean,
-  IsEmail,
-  Length,
-  IsOptional,
-} from 'class-validator';
+import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export type FoodDocument = Food & Document;

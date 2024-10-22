@@ -21,6 +21,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import mongoose from 'mongoose';
 @ApiTags('Categories')
 @ApiBearerAuth()
 @Controller('categories')
@@ -39,7 +40,7 @@ export class CategoryController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  @ApiOperation({ summary: 'Get all categorys' })
+  @ApiOperation({ summary: 'Get all category' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })

@@ -18,8 +18,9 @@ export class CustomerRepository {
     userId: string,
     search?: string,
     isSuperAdmin?: boolean,
+    isOrderList?: boolean,
   ): Promise<Customer[]> {
-    const query = this.createSearchQuery(search);
+    const query = this.createSearchQuery(search, isOrderList);
     if (!isSuperAdmin) {
       query.createdBy = userId;
     }
@@ -57,8 +58,9 @@ export class CustomerRepository {
     userId: string,
     search?: string,
     isSuperAdmin?: boolean,
+    isOrderList?: boolean,
   ): Promise<Customer[]> {
-    const query = this.createSearchQuery(search);
+    const query = this.createSearchQuery(search, isOrderList);
     if (!isSuperAdmin) {
       query.createdBy = userId;
     }
@@ -74,8 +76,9 @@ export class CustomerRepository {
     userId: string,
     search?: string,
     isSuperAdmin?: boolean,
+    isOrderList?: boolean,
   ): Promise<number> {
-    const query = this.createSearchQuery(search);
+    const query = this.createSearchQuery(search, isOrderList);
     if (!isSuperAdmin) {
       query.createdBy = userId;
     }
@@ -104,24 +107,46 @@ export class CustomerRepository {
       .exec();
   }
 
-  private createSearchQuery(search: string): any {
+  private createSearchQuery(search: string, isOrderList: boolean): any {
     if (!search) {
       return {};
     }
+
     const fieldsToSearch = [
-      'invoiceNo',
       'customerName',
       'surName',
       'Address',
       'village',
       'phone',
-      'gender',
       'description',
+      'invoiceNo',
     ];
-    return {
-      $or: fieldsToSearch.map((field) => ({
-        [field]: { $regex: search, $options: 'i' },
-      })),
-    };
+
+    const orderListFieldsToSearch = [
+      'orderList.date',
+      'orderList.time',
+      'orderList.location',
+      'orderList.dish',
+      'orderList.foodType',
+    ];
+
+    if (isOrderList) {
+      return {
+        $or: orderListFieldsToSearch.map((field) => ({
+          [field]: { $regex: search, $options: 'i' },
+        })),
+      };
+    } else {
+      return {
+        $or: [
+          ...fieldsToSearch.map((field) => ({
+            [field]: { $regex: search, $options: 'i' },
+          })),
+          ...orderListFieldsToSearch.map((field) => ({
+            [field]: { $regex: search, $options: 'i' },
+          })),
+        ],
+      };
+    }
   }
 }

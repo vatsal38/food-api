@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { CustomerRepository } from './customer.repository';
 import { Customer } from './customer.schema';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class CustomerService {
@@ -43,20 +44,42 @@ export class CustomerService {
     limit?: number,
     search?: string,
     isSuperAdmin?: boolean,
+    isOrderList?: boolean,
   ) {
     if (page && limit) {
       const skip = (page - 1) * limit;
-      const [items, totalRecords] = await Promise.all([
+      const [data, totalRecords] = await Promise.all([
         this.customerRepository.findWithPagination(
           skip,
           limit,
           userId,
           search,
           isSuperAdmin,
+          isOrderList,
         ),
-        this.customerRepository.countAll(userId, search, isSuperAdmin),
+        this.customerRepository.countAll(
+          userId,
+          search,
+          isSuperAdmin,
+          isOrderList,
+        ),
       ]);
       const totalPages = Math.ceil(totalRecords / limit);
+
+      const orderListData = data?.flatMap((item: any) =>
+        item.orderList.map((order: any) => ({
+          customerName: item.customerName,
+          date: order.date,
+          time: order.time,
+          dish: order.dish,
+          location: order.location,
+          foodType: {
+            _id: order.foodType._id,
+            name: order.foodType.foodType,
+          },
+        })),
+      );
+      const items = isOrderList ? orderListData : data;
       return {
         items,
         recordsPerPage: limit,
@@ -69,8 +92,24 @@ export class CustomerService {
         userId,
         search,
         isSuperAdmin,
+        isOrderList,
       );
-      return items;
+
+      const orderListData = items?.flatMap((item: any) =>
+        item.orderList.map((order: any) => ({
+          customerName: item.customerName,
+          date: order.date,
+          time: order.time,
+          dish: order.dish,
+          location: order.location,
+          foodType: {
+            _id: order.foodType._id,
+            name: order.foodType.foodType,
+          },
+        })),
+      );
+
+      return isOrderList ? orderListData : items;
     }
   }
 

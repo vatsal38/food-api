@@ -4,15 +4,16 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { OrderRepository } from './order.repository';
-import { Order } from './order.schema';
+import { MenuRepository } from './menu.repository';
+import { Menu } from './menu.schema';
+import mongoose from 'mongoose';
 @Injectable()
-export class OrderService {
-  constructor(private readonly orderRepository: OrderRepository) {}
+export class MenuService {
+  constructor(private readonly menuRepository: MenuRepository) {}
 
-  async create(order: Order, userId: string): Promise<Order> {
+  async create(menu: Menu, userId: string): Promise<Menu> {
     try {
-      return await this.orderRepository.create(order, userId);
+      return await this.menuRepository.create(menu, userId);
     } catch (error) {
       if (
         error instanceof ConflictException ||
@@ -20,7 +21,7 @@ export class OrderService {
       ) {
         throw error;
       } else {
-        throw new InternalServerErrorException('Failed to create order');
+        throw new InternalServerErrorException('Failed to create menu');
       }
     }
   }
@@ -35,14 +36,14 @@ export class OrderService {
     if (page && limit) {
       const skip = (page - 1) * limit;
       const [items, totalRecords] = await Promise.all([
-        this.orderRepository.findWithPagination(
+        this.menuRepository.findWithPagination(
           skip,
           limit,
           userId,
           search,
           isSuperAdmin,
         ),
-        this.orderRepository.countAll(userId, search, isSuperAdmin),
+        this.menuRepository.countAll(userId, search, isSuperAdmin),
       ]);
       const totalPages = Math.ceil(totalRecords / limit);
       return {
@@ -53,7 +54,7 @@ export class OrderService {
         totalPages,
       };
     } else {
-      const items = await this.orderRepository.findAll(
+      const items = await this.menuRepository.findAll(
         userId,
         search,
         isSuperAdmin,
@@ -62,25 +63,21 @@ export class OrderService {
     }
   }
 
-  async findOne(id: string): Promise<Order> {
-    const order = await this.orderRepository.findOne(id);
-    if (!order) {
-      throw new NotFoundException('Order not found');
+  async findOne(id: string): Promise<Menu> {
+    const menu = await this.menuRepository.findOne(id);
+    if (!menu) {
+      throw new NotFoundException('Menu not found');
     }
-    return order;
+    return menu;
   }
 
-  async update(
-    id: string,
-    order: Partial<Order>,
-    userId: string,
-  ): Promise<Order> {
+  async update(id: string, menu: Partial<Menu>, userId: string): Promise<Menu> {
     try {
-      const existOrder = await this.orderRepository.findOne(id);
-      if (!existOrder) {
-        throw new NotFoundException('Order not found');
+      const existMenu = await this.menuRepository.findOne(id);
+      if (!existMenu) {
+        throw new NotFoundException('Menu not found');
       }
-      return await this.orderRepository.update(id, order);
+      return await this.menuRepository.update(id, menu);
     } catch (error) {
       if (
         error instanceof ConflictException ||
@@ -89,24 +86,24 @@ export class OrderService {
       ) {
         throw error;
       } else {
-        throw new InternalServerErrorException('Failed to update order');
+        throw new InternalServerErrorException('Failed to update menu');
       }
     }
   }
 
-  async remove(id: string): Promise<Order> {
+  async remove(id: string): Promise<Menu> {
     try {
-      const deletedOrder = await this.orderRepository.remove(id);
-      if (!deletedOrder) {
-        throw new NotFoundException('Order not found');
+      const deletedMenu = await this.menuRepository.remove(id);
+      if (!deletedMenu) {
+        throw new NotFoundException('Menu not found');
       }
-      return deletedOrder;
+      return deletedMenu;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       } else {
         throw new InternalServerErrorException(
-          'Failed to delete order',
+          'Failed to delete menu',
           error.message,
         );
       }

@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
-export type OrderDocument = Order & Document;
+export type MenuDocument = Menu & Document;
 
 @Schema()
-export class Order {
+export class Menu {
   @ApiProperty({
     type: mongoose.Schema.Types.ObjectId,
     description: 'Category ID',
@@ -44,20 +44,20 @@ export class Order {
   updatedAt: Date;
 }
 
-export const OrderSchema = SchemaFactory.createForClass(Order);
+export const MenuSchema = SchemaFactory.createForClass(Menu);
 
-OrderSchema.pre('save', function (next) {
-  const order = this as OrderDocument;
-  order.updatedAt = new Date();
+MenuSchema.pre('save', function (next) {
+  const menu = this as MenuDocument;
+  menu.updatedAt = new Date();
   next();
 });
 
-OrderSchema.pre('updateOne', function (next) {
+MenuSchema.pre('updateOne', function (next) {
   this.set({ updatedAt: new Date() });
   next();
 });
 
-OrderSchema.pre('findOneAndUpdate', function (next) {
+MenuSchema.pre('findOneAndUpdate', function (next) {
   this.set({ updatedAt: new Date() });
   next();
 });

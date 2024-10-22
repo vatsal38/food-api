@@ -10,10 +10,10 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { OrderService } from './order.service';
+import { MenuService } from './menu.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Order } from './order.schema';
-import { UpdateOrderDto } from './update-order.dto';
+import { Menu } from './menu.schema';
+import { UpdateMenuDto } from './update-menu.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -21,15 +21,16 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-@ApiTags('Orders')
+import mongoose from 'mongoose';
+@ApiTags('Menus')
 @ApiBearerAuth()
-@Controller('orders')
-export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+@Controller('menus')
+export class MenuController {
+  constructor(private readonly menuService: MenuService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiOperation({ summary: 'Create a new order' })
+  @ApiOperation({ summary: 'Create a new menu' })
   @ApiBody({
     schema: {
       type: 'array',
@@ -42,17 +43,17 @@ export class OrderController {
       },
     },
   })
-  async create(@Req() req: any, @Body() order: any) {
+  async create(@Req() req: any, @Body() menu: any) {
     const userId = req.user.userId;
     await Promise.all(
-      order.map((orderDto: any) => this.orderService.create(orderDto, userId)),
+      menu.map((menuDto: any) => this.menuService.create(menuDto, userId)),
     );
-    return { message: 'Order created successfully!' };
+    return { message: 'Menu created successfully!' };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  @ApiOperation({ summary: 'Get all orders' })
+  @ApiOperation({ summary: 'Get all menus' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })
@@ -64,35 +65,35 @@ export class OrderController {
   ) {
     const isSuperAdmin = req.user.role === 'superadmin';
     const userId = req.user.userId;
-    return this.orderService.findAll(userId, page, limit, search, isSuperAdmin);
+    return this.menuService.findAll(userId, page, limit, search, isSuperAdmin);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  @ApiOperation({ summary: 'Get a single order by id' })
+  @ApiOperation({ summary: 'Get a single menu by id' })
   async findOne(@Param('id') id: string) {
-    return this.orderService.findOne(id);
+    return this.menuService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a order' })
-  @ApiBody({ type: UpdateOrderDto })
+  @ApiOperation({ summary: 'Update a menu' })
+  @ApiBody({ type: UpdateMenuDto })
   async update(
     @Req() req: any,
     @Param('id') id: string,
-    @Body() updateOrderDto: UpdateOrderDto,
+    @Body() updateMenuDto: UpdateMenuDto,
   ) {
     const userId = req.user.userId;
-    await this.orderService.update(id, updateOrderDto, userId);
-    return { message: 'Order updated successfully!' };
+    await this.menuService.update(id, updateMenuDto, userId);
+    return { message: 'Menu updated successfully!' };
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Delete a order' })
+  @ApiOperation({ summary: 'Delete a menu' })
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    await this.orderService.remove(id);
-    return { message: 'Order deleted successfully!' };
+    await this.menuService.remove(id);
+    return { message: 'Menu deleted successfully!' };
   }
 }

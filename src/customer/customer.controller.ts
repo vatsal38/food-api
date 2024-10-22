@@ -21,6 +21,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import mongoose from 'mongoose';
 @ApiTags('Customers')
 @ApiBearerAuth()
 @Controller('customers')
@@ -43,20 +44,24 @@ export class CustomerController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiQuery({ name: 'isOrderList', required: false, type: Boolean })
   async findAll(
     @Req() req: any,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
     @Query('search') search?: string,
+    @Query('isOrderList') isOrderList?: boolean,
   ) {
     const isSuperAdmin = req.user.role === 'superadmin';
     const userId = req.user.userId;
+
     return this.customerService.findAll(
       userId,
       page,
       limit,
       search,
       isSuperAdmin,
+      isOrderList,
     );
   }
 

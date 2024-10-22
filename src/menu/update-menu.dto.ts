@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional } from 'class-validator';
 import mongoose from 'mongoose';
 
-export class UpdateOrderDto {
+export class UpdateMenuDto {
   @IsOptional()
   @ApiProperty({ type: String, description: 'Category ID' })
   categoryId: string;

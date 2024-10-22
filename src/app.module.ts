@@ -15,7 +15,7 @@ import { AppController } from './app.controller';
 import { CategoryModule } from './category/category.module';
 import { CustomerModule } from './customer/customer.module';
 import { FoodModule } from './food/food.module';
-import { OrderModule } from './orders/order.module';
+import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
@@ -70,7 +70,7 @@ import { OrderModule } from './orders/order.module';
     CategoryModule,
     CustomerModule,
     FoodModule,
-    OrderModule,
+    MenuModule,
   ],
   controllers: [UploadController, AppController],
   providers: [FirebaseService, AppService],
